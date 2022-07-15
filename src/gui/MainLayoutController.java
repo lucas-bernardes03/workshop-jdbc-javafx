@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import app.App;
 import gui.util.Alerts;
@@ -29,7 +30,10 @@ public class MainLayoutController implements Initializable{
 
     @FXML
     public void onMenuItemStarAction(){
-        loadLayoutStar("/gui/StarList.fxml");
+        loadLayout("/gui/StarList.fxml", (StarListController controller) -> {
+            controller.setStarService(new StarService());
+            controller.updateTableView();
+        });
     }
     
     @FXML
@@ -44,29 +48,10 @@ public class MainLayoutController implements Initializable{
     
     @FXML
     public void onMenuItemAboutAction(){
-        loadLayout("/gui/About.fxml");
+        loadLayout("/gui/About.fxml", x -> {});
     }
 
-    private synchronized void loadLayout(String absoluteName){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-            VBox newVBox = loader.load();
-
-            Scene mainScene = App.getMainScene();
-            VBox mainVBox = ((VBox)((ScrollPane)mainScene.getRoot()).getContent());
-
-            Node mainMenu = mainVBox.getChildren().get(0);
-            mainVBox.getChildren().clear();
-            mainVBox.getChildren().add(mainMenu);
-            mainVBox.getChildren().addAll(newVBox.getChildren());
-            
-        }
-        catch(IOException e){
-            Alerts.showAlert("IO Exception", "Error loading layout", e.getMessage(), AlertType.ERROR);
-        }
-    }
-
-    private synchronized void loadLayoutStar(String absoluteName){
+    private synchronized <T> void loadLayout(String absoluteName, Consumer<T> initializeAction){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             VBox newVBox = loader.load();
@@ -79,15 +64,15 @@ public class MainLayoutController implements Initializable{
             mainVBox.getChildren().add(mainMenu);
             mainVBox.getChildren().addAll(newVBox.getChildren());
 
-            StarListController controller = loader.getController();
-            controller.setStarService(new StarService());
-            controller.updateTableView();
-            
+            T controller = loader.getController();
+            initializeAction.accept(controller);
         }
         catch(IOException e){
             Alerts.showAlert("IO Exception", "Error loading layout", e.getMessage(), AlertType.ERROR);
         }
     }
+
+    
 
 
     @Override
