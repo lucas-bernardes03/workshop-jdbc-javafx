@@ -28,7 +28,7 @@ public class MainLayoutController implements Initializable{
 
     @FXML
     public void onMenuItemStarAction(){
-        System.out.println("To the stars!");
+        loadLayout("/gui/StarList.fxml");
     }
     
     @FXML
