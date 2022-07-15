@@ -15,6 +15,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
+import model.services.StarService;
 
 public class MainLayoutController implements Initializable{
     @FXML
@@ -28,7 +29,7 @@ public class MainLayoutController implements Initializable{
 
     @FXML
     public void onMenuItemStarAction(){
-        loadLayout("/gui/StarList.fxml");
+        loadLayoutStar("/gui/StarList.fxml");
     }
     
     @FXML
@@ -58,6 +59,29 @@ public class MainLayoutController implements Initializable{
             mainVBox.getChildren().clear();
             mainVBox.getChildren().add(mainMenu);
             mainVBox.getChildren().addAll(newVBox.getChildren());
+            
+        }
+        catch(IOException e){
+            Alerts.showAlert("IO Exception", "Error loading layout", e.getMessage(), AlertType.ERROR);
+        }
+    }
+
+    private synchronized void loadLayoutStar(String absoluteName){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            VBox newVBox = loader.load();
+
+            Scene mainScene = App.getMainScene();
+            VBox mainVBox = ((VBox)((ScrollPane)mainScene.getRoot()).getContent());
+
+            Node mainMenu = mainVBox.getChildren().get(0);
+            mainVBox.getChildren().clear();
+            mainVBox.getChildren().add(mainMenu);
+            mainVBox.getChildren().addAll(newVBox.getChildren());
+
+            StarListController controller = loader.getController();
+            controller.setStarService(new StarService());
+            controller.updateTableView();
             
         }
         catch(IOException e){

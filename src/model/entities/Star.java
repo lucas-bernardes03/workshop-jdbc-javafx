@@ -1,6 +1,8 @@
 package model.entities;
 
-public class Star {
+import java.io.Serializable;
+
+public class Star implements Serializable{
     private Integer id;
     private String name;
     private String stellarClass;
