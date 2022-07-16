@@ -10,36 +10,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.dao.SellerDao;
+import model.dao.PlanetDao;
 import model.db.DB;
 import model.db.DbException;
-import model.entities.Department;
-import model.entities.Seller;
+import model.entities.Star;
+import model.entities.Planet;
 
-public class SellerDaoJDBC implements SellerDao {
+public class PlanetDaoJDBC implements PlanetDao {
 
     private Connection con;
 
-    public SellerDaoJDBC(Connection con){
+    public PlanetDaoJDBC(Connection con){
         this.con = con;
     }
 
     @Override
-    public void insert(Seller sl) {
+    public void insert(Planet planet) {
         PreparedStatement pst = null;
 
         try{
             pst = con.prepareStatement(
-                "INSERT INTO seller "
-                + "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
-                + "VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO planet "
+                + "(Name, Type, Diameter, Mass, Gravity, OrbitalSpeed, StarId) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS);
             
-            pst.setString(1, sl.getName());
-            pst.setString(2, sl.getEmail());
-            pst.setDate(3, new java.sql.Date(sl.getBirthDate().getTime()));
-            pst.setDouble(4, sl.getBaseSalary());
-            pst.setInt(5, sl.getDepartment().getId());
+            pst.setString(1, planet.getName());
+            pst.setString(2, planet.getType());
+            pst.setDouble(3, planet.getDiameter());
+            pst.setDouble(4, planet.getMass());
+            pst.setDouble(5, planet.getGravity());
+            pst.setDouble(6, planet.getOrbitalSpeed());
+            pst.setInt(7, planet.getStar().getId());
 
             int updatedRows = pst.executeUpdate();
 
@@ -47,7 +49,7 @@ public class SellerDaoJDBC implements SellerDao {
                 ResultSet rs = pst.getGeneratedKeys();
                 if(rs.next()){
                     int id = rs.getInt(1);
-                    sl.setId(id);
+                    planet.setId(id);
                 }
                 DB.closeResultSet(rs);
             }
@@ -62,21 +64,23 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public void update(Seller sl) {
+    public void update(Planet planet) {
         PreparedStatement pst = null;
 
         try{
             pst = con.prepareStatement(
                 "UPDATE seller "
-                + "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "
+                + "SET Name = ?, Type = ?, Diameter = ?, Mass = ?, Gravity = ?, OrbitalSpeed = ?, StarId = ? "
                 + "WHERE Id = ?");
             
-            pst.setString(1, sl.getName());
-            pst.setString(2, sl.getEmail());
-            pst.setDate(3, new java.sql.Date(sl.getBirthDate().getTime()));
-            pst.setDouble(4, sl.getBaseSalary());
-            pst.setInt(5, sl.getDepartment().getId());
-            pst.setInt(6, sl.getId());
+            pst.setString(1, planet.getName());
+            pst.setString(2, planet.getType());
+            pst.setDouble(3, planet.getDiameter());
+            pst.setDouble(4, planet.getMass());
+            pst.setDouble(5, planet.getGravity());
+            pst.setDouble(6, planet.getOrbitalSpeed());
+            pst.setInt(7, planet.getStar().getId());
+            pst.setInt(6, planet.getId());
 
             pst.executeUpdate();
 
@@ -94,7 +98,7 @@ public class SellerDaoJDBC implements SellerDao {
     public void deleteById(Integer id) {
         PreparedStatement pst = null;
         try{
-            pst = con.prepareStatement("DELETE FROM seller WHERE Id = ?");
+            pst = con.prepareStatement("DELETE FROM planet WHERE Id = ?");
             pst.setInt(1, id);
             pst.executeUpdate();
         }
@@ -107,24 +111,24 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public Seller findById(Integer id) {
+    public Planet findById(Integer id) {
         PreparedStatement pst = null;
         ResultSet rs = null;
 
         try{
             pst = con.prepareStatement(
-            "SELECT seller.*,department.Name as DepName "
-            + "FROM seller INNER JOIN department "
-            + "ON seller.DepartmentId = department.Id "
-            + "WHERE seller.Id = ?");
+            "SELECT planet.*,star.Name as StarName "
+            + "FROM planet INNER JOIN star "
+            + "ON planet.StarId = star.Id "
+            + "WHERE planet.Id = ?");
 
             pst.setInt(1, id);
             rs = pst.executeQuery();
             
             if(rs.next()){
-                Department dp = instDepartment(rs);
-                Seller sl = instSeller(rs, dp);
-                return sl;
+                Star star = instStar(rs);
+                Planet planet = instPlanet(rs, star);
+                return planet;
             }
             
             return null;
@@ -140,34 +144,34 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public List<Seller> findByDepartment(Department dp){
+    public List<Planet> findByStar(Star star){
         PreparedStatement pst = null;
         ResultSet rs = null;
 
         try{
             pst = con.prepareStatement(
-            "SELECT seller.*,department.Name as DepName "
-            + "FROM seller INNER JOIN department "
-            + "ON seller.DepartmentId = department.Id "
-            + "WHERE DepartmentId = ? "
+            "SELECT planet.*,star.Name as StarName "
+            + "FROM planet INNER JOIN star "
+            + "ON planet.StarId = star.Id "
+            + "WHERE StarId = ? "
             + "ORDER BY Name");
 
-            pst.setInt(1, dp.getId());
+            pst.setInt(1, star.getId());
             rs = pst.executeQuery();
             
-            List<Seller> list = new ArrayList<>();
-            Map<Integer, Department> map = new HashMap<>();
+            List<Planet> list = new ArrayList<>();
+            Map<Integer, Star> map = new HashMap<>();
 
             while(rs.next()){
-                Department dep = map.get(rs.getInt("DepartmentId"));
+                Star st = map.get(rs.getInt("StarId"));
                 
-                if(dep == null){
-                    dep = instDepartment(rs);
-                    map.put(rs.getInt("DepartmentId"), dep);
+                if(st == null){
+                    st = instStar(rs);
+                    map.put(rs.getInt("StarId"), st);
                 } 
 
-                Seller sl = instSeller(rs, dep);
-                list.add(sl);
+                Planet planet = instPlanet(rs, st);
+                list.add(planet);
             }
             
             return list;
@@ -182,32 +186,32 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public List<Seller> findAll() {
+    public List<Planet> findAll() {
         PreparedStatement pst = null;
         ResultSet rs = null;
 
         try{
             pst = con.prepareStatement(
-            "SELECT seller.*,department.Name as DepName "
-            + "FROM seller INNER JOIN department "
-            + "ON seller.DepartmentId = department.Id "
+            "SELECT planet.*,star.Name as StarName "
+            + "FROM planet INNER JOIN star "
+            + "ON planet.StarId = star.Id "
             + "ORDER BY Name");
 
             rs = pst.executeQuery();
             
-            List<Seller> list = new ArrayList<>();
-            Map<Integer, Department> map = new HashMap<>();
+            List<Planet> list = new ArrayList<>();
+            Map<Integer, Star> map = new HashMap<>();
 
             while(rs.next()){
-                Department dep = map.get(rs.getInt("DepartmentId"));
+                Star star = map.get(rs.getInt("StarId"));
                 
-                if(dep == null){
-                    dep = instDepartment(rs);
-                    map.put(rs.getInt("DepartmentId"), dep);
+                if(star == null){
+                    star = instStar(rs);
+                    map.put(rs.getInt("StarId"), star);
                 } 
 
-                Seller sl = instSeller(rs, dep);
-                list.add(sl);
+                Planet planet = instPlanet(rs, star);
+                list.add(planet);
             }
             
             return list;
@@ -222,13 +226,13 @@ public class SellerDaoJDBC implements SellerDao {
     }
     
     //instantiate
-    private Department instDepartment(ResultSet rs) throws SQLException{
-        Department dp = new Department(rs.getInt("DepartmentId"), rs.getString("DepName"));
-        return dp;
+    private Star instStar(ResultSet rs) throws SQLException{
+        Star star = new Star(rs.getInt("StarId"), rs.getString("StarName"), rs.getString("StellarClass"), rs.getDouble("Mass"));
+        return star;
     }
 
-    private Seller instSeller(ResultSet rs, Department dp) throws SQLException{
-        Seller sl = new Seller(rs.getInt("Id"), rs.getString("Name"), rs.getString("Email"), rs.getDate("BirthDate"), rs.getDouble("BaseSalary"), dp);
-        return sl;
+    private Planet instPlanet(ResultSet rs, Star star) throws SQLException{
+        Planet planet = new Planet(rs.getInt("Id"), rs.getString("Name"), rs.getString("Type"), rs.getDouble("Diameter"), rs.getDouble("Mass"), rs.getDouble("Gravity"), rs.getDouble("OrbitalSpeed"), star);
+        return planet;
     }
 }

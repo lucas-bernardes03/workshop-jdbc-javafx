@@ -8,26 +8,28 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.dao.DepartmentDao;
+import model.dao.StarDao;
 import model.db.DB;
 import model.db.DbException;
-import model.entities.Department;
+import model.entities.Star;
 
-public class DepartmentDaoJDBC implements DepartmentDao {
+public class StarDaoJDBC implements StarDao {
 
     private Connection con;
 
-    public DepartmentDaoJDBC(Connection con) {
+    public StarDaoJDBC(Connection con) {
         this.con = con;
     }
 
     @Override
-    public void insert(Department dp) {
+    public void insert(Star star) {
         PreparedStatement pst = null;
 
         try{
-            pst = con.prepareStatement("INSERT INTO department (Name) VALUES (?)",Statement.RETURN_GENERATED_KEYS);
-            pst.setString(1, dp.getName());
+            pst = con.prepareStatement("INSERT INTO star (Name, StellarClass, Mass) VALUES (?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
+            pst.setString(1, star.getName());
+            pst.setString(2, star.getStellarClass());
+            pst.setDouble(3, star.getMass());
 
             int updatedRows = pst.executeUpdate();
 
@@ -35,7 +37,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
                 ResultSet rs = pst.getGeneratedKeys();
                 if(rs.next()){
                     int id = rs.getInt(1);
-                    dp.setId(id);
+                    star.setId(id);
                 }
                 DB.closeResultSet(rs);
             }
@@ -51,15 +53,17 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     }
 
     @Override
-    public void update(Department dp) {
+    public void update(Star star) {
         PreparedStatement pst = null;
 
         try{
             pst = con.prepareStatement(
-                "UPDATE department SET Name = ? WHERE Id = ?");
+                "UPDATE star SET Name = ?, StellarClass = ?, Mass = ?  WHERE Id = ?");
             
-            pst.setString(1, dp.getName());
-            pst.setInt(2, dp.getId());
+            pst.setString(1, star.getName());
+            pst.setString(2, star.getStellarClass());
+            pst.setDouble(3, star.getMass());
+            pst.setInt(4, star.getId());
 
             pst.executeUpdate();
 
@@ -77,7 +81,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     public void deleteById(Integer id) {
         PreparedStatement pst = null;
         try{
-            pst = con.prepareStatement("DELETE FROM department WHERE Id = ?");
+            pst = con.prepareStatement("DELETE FROM star WHERE Id = ?");
             pst.setInt(1, id);
             pst.executeUpdate();
         }
@@ -90,18 +94,18 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     }
 
     @Override
-    public Department findById(Integer id) {
+    public Star findById(Integer id) {
         PreparedStatement pst = null;
         ResultSet rs = null;
 
         try{
             pst = con.prepareStatement(
-            "SELECT * FROM department WHERE Id = ?");
+            "SELECT * FROM star WHERE Id = ?");
 
             pst.setInt(1, id);
             rs = pst.executeQuery();
             
-            if(rs.next()) return new Department(rs.getInt("Id"), rs.getString("Name"));
+            if(rs.next()) return new Star(rs.getInt("Id"), rs.getString("Name"), rs.getString("StellarClass"), rs.getDouble("Mass"));
             
             return null;
         }
@@ -115,17 +119,17 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     }
 
     @Override
-    public List<Department> findAll() {
+    public List<Star> findAll() {
         PreparedStatement pst = null;
         ResultSet rs = null;
 
         try{
-            pst = con.prepareStatement("SELECT * FROM department ORDER BY Name");
+            pst = con.prepareStatement("SELECT * FROM star ORDER BY Name");
             rs = pst.executeQuery();
         
-            List<Department> list = new ArrayList<>();
+            List<Star> list = new ArrayList<>();
             while(rs.next()){
-                list.add(new Department(rs.getInt("Id"), rs.getString("Name")));
+                list.add(new Star(rs.getInt("Id"), rs.getString("Name"), rs.getString("StellarClass"), rs.getDouble("Mass")));
             }
             
             return list;
