@@ -16,7 +16,7 @@ import model.db.DbException;
 import model.entities.Star;
 import model.entities.Planet;
 
-public class PlanetDaoJDBC implements PlanetDao {
+public class PlanetDaoJDBC extends instImplementations implements PlanetDao {
 
     private Connection con;
 
@@ -69,7 +69,7 @@ public class PlanetDaoJDBC implements PlanetDao {
 
         try{
             pst = con.prepareStatement(
-                "UPDATE seller "
+                "UPDATE planet "
                 + "SET Name = ?, Type = ?, Diameter = ?, Mass = ?, Gravity = ?, OrbitalSpeed = ?, StarId = ? "
                 + "WHERE Id = ?");
             
@@ -224,15 +224,5 @@ public class PlanetDaoJDBC implements PlanetDao {
             DB.closeResultSet(rs);
         }
     }
-    
-    //instantiate
-    private Star instStar(ResultSet rs) throws SQLException{
-        Star star = new Star(rs.getInt("StarId"), rs.getString("StarName"), rs.getString("StellarClass"), rs.getDouble("Mass"));
-        return star;
-    }
 
-    private Planet instPlanet(ResultSet rs, Star star) throws SQLException{
-        Planet planet = new Planet(rs.getInt("Id"), rs.getString("Name"), rs.getString("Type"), rs.getDouble("Diameter"), rs.getDouble("Mass"), rs.getDouble("Gravity"), rs.getDouble("OrbitalSpeed"), star);
-        return planet;
-    }
 }
