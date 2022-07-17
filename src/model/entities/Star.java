@@ -8,6 +8,8 @@ public class Star implements Serializable{
     private String stellarClass;
     private Double mass;
     
+    public Star(){}
+
     public Star(Integer id, String name, String stellarClass, Double mass) {
         this.id = id;
         this.name = name;

@@ -47,7 +47,8 @@ public class StarListController implements Initializable {
     @FXML
     public void onBtNewStarAction(ActionEvent event){
         Stage parentStage = Utils.currentStage(event);
-        createDialogForm(parentStage, "/gui/StarForm.fxml");
+        Star star = new Star();
+        createDialogForm(star, parentStage, "/gui/StarForm.fxml");
     }
 
     public void setStarService(StarService service){
@@ -71,10 +72,14 @@ public class StarListController implements Initializable {
         tableViewStar.setItems(obsList);
     }
 
-    private void createDialogForm(Stage parentStage, String absoluteName){
+    private void createDialogForm(Star star, Stage parentStage, String absoluteName){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
+
+            StarFormController controller = loader.getController();
+            controller.setStar(star);
+            controller.updateFormData();
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Enter Star data");
