@@ -13,4 +13,9 @@ public class StarService {
     public List<Star> findAll(){
         return dao.findAll();
     }
+
+    public void saveOrUpdate(Star star){
+        if(star.getId() == null) dao.insert(star);    
+        else dao.update(star);
+    }
 }

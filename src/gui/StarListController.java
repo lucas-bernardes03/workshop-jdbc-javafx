@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import app.App;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ import javafx.stage.Stage;
 import model.entities.Star;
 import model.services.StarService;
 
-public class StarListController implements Initializable {
+public class StarListController implements Initializable, DataChangeListener {
     private StarService service;
     
     @FXML
@@ -79,6 +80,8 @@ public class StarListController implements Initializable {
 
             StarFormController controller = loader.getController();
             controller.setStar(star);
+            controller.setStarService(new StarService());
+            controller.subscribeDataChangeListener(this);
             controller.updateFormData();
 
             Stage dialogStage = new Stage();
@@ -98,6 +101,11 @@ public class StarListController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeNodes();
+    }
+
+    @Override
+    public void onDataChange() {
+        updateTableView();
     }
 
 }
