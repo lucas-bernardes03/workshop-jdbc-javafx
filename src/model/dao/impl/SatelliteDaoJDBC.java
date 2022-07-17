@@ -237,5 +237,23 @@ public class SatelliteDaoJDBC extends instImplementations implements SatelliteDa
             DB.closeResultSet(rs);
         }
     }
+
+    @Override
+    protected Star instStar(ResultSet rs) throws SQLException{
+        Star star = new Star(rs.getInt("StarId"), rs.getString("StarName"), rs.getString("StellarClass"), rs.getDouble("Mass"));
+        return star;
+    }
+
+    @Override
+    protected Planet instPlanet(ResultSet rs, Star star) throws SQLException{
+        Planet planet = new Planet(rs.getInt("PlanetId"), rs.getString("PlanetName"), rs.getString("Type"), rs.getDouble("Diameter"), rs.getDouble("Mass"), rs.getDouble("Gravity"), rs.getDouble("OrbitalSpeed"), star);
+        return planet;
+    }
+
+    @Override
+    protected Satellite instSatellite(ResultSet rs, Planet planet) throws SQLException{
+        Satellite satellite = new Satellite(rs.getInt("Id"), rs.getString("Name"), planet);
+        return satellite;
+    }
     
 }
