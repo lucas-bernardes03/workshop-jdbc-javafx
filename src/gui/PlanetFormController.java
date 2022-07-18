@@ -11,21 +11,30 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.util.Callback;
 import model.db.DbException;
 import model.entities.Planet;
+import model.entities.Star;
 import model.exceptions.ValidationException;
 import model.services.PlanetService;
+import model.services.StarService;
 
 public class PlanetFormController implements Initializable {
     private Planet planet;
     private PlanetService service;
+    private StarService starService;
     private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
     
     @FXML
@@ -42,7 +51,8 @@ public class PlanetFormController implements Initializable {
     private TextField txtGravity;
     @FXML
     private TextField txtOrbitalSpeed;
-    
+    @FXML
+    private ComboBox<Star> comboBoxStar;
 
     @FXML
     private Label labelErrorName;
@@ -61,6 +71,8 @@ public class PlanetFormController implements Initializable {
     private Button btSave;
     @FXML
     private Button btCancel;
+
+    private ObservableList<Star> obsList;
 
     @FXML
     public void onBtSaveAction(ActionEvent event){
@@ -97,8 +109,9 @@ public class PlanetFormController implements Initializable {
         this.planet = planet;
     }
 
-    public void setPlanetService(PlanetService service){
+    public void setServices(PlanetService service, StarService starService){
         this.service = service;
+        this.starService = starService;
     }
 
     private Planet getFormData(){
@@ -151,6 +164,8 @@ public class PlanetFormController implements Initializable {
         txtMass.setText(String.valueOf(planet.getMass()));
         txtGravity.setText(String.valueOf(planet.getGravity()));
         txtOrbitalSpeed.setText(String.valueOf(planet.getOrbitalSpeed()));
+        if(planet.getStar() == null) comboBoxStar.getSelectionModel().selectFirst();
+        else comboBoxStar.setValue(planet.getStar());
     }
 
     private void setErrorMessages(Map<String,String> errors){
@@ -163,9 +178,23 @@ public class PlanetFormController implements Initializable {
         if(fields.contains("PlanetOrbitalSpeed")) labelErrorOrbitalSpeed.setText(errors.get("PlanetOrbitalSpeed"));
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        initializeNodes();
+    public void loadAssociatedObjects(){
+        if(starService == null) throw new IllegalStateException("Service was null");
+        List<Star> list = starService.findAll();
+        obsList = FXCollections.observableArrayList(list);
+        comboBoxStar.setItems(obsList);
+    }
+
+    private void initializeComboBoxStar(){
+        Callback<ListView<Star>,ListCell<Star>> factory = lv -> new ListCell<Star>(){
+            @Override
+            protected void updateItem(Star star, boolean empty){
+                super.updateItem(star, empty);
+                setText(empty ? "" : star.getName());
+            }
+        };
+        comboBoxStar.setCellFactory(factory);
+        comboBoxStar.setButtonCell(factory.call(null));
     }
 
     private void initializeNodes(){
@@ -176,6 +205,13 @@ public class PlanetFormController implements Initializable {
         Constraints.setTextFieldDouble(txtMass);
         Constraints.setTextFieldDouble(txtGravity);
         Constraints.setTextFieldDouble(txtOrbitalSpeed);
+        initializeComboBoxStar();
     }
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initializeNodes();
+    }
+
     
 }

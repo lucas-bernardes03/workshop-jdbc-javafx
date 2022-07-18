@@ -31,6 +31,7 @@ import javafx.stage.Stage;
 import model.db.DbIntegrityException;
 import model.entities.Planet;
 import model.services.PlanetService;
+import model.services.StarService;
 
 public class PlanetListController implements Initializable, DataChangeListener {
     private PlanetService service;
@@ -105,7 +106,8 @@ public class PlanetListController implements Initializable, DataChangeListener {
 
             PlanetFormController controller = loader.getController();
             controller.setPlanet(planet);
-            controller.setPlanetService(new PlanetService());
+            controller.setServices(new PlanetService(), new StarService());
+            controller.loadAssociatedObjects();
             controller.subscribeDataChangeListener(this);
             controller.updateFormData();
 
@@ -119,6 +121,7 @@ public class PlanetListController implements Initializable, DataChangeListener {
 
         }
         catch(IOException e){
+            e.printStackTrace();
             Alerts.showAlert("IO Exception", "Error loading layout", e.getMessage(), AlertType.ERROR);
         }
     }
