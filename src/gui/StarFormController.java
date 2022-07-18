@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
@@ -18,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import model.db.DbException;
 import model.entities.Star;
+import model.exceptions.ValidationException;
 import model.services.StarService;
 
 public class StarFormController implements Initializable {
@@ -59,6 +62,9 @@ public class StarFormController implements Initializable {
         catch(DbException e){
             Alerts.showAlert("Error saving object", null, e.getMessage(), AlertType.ERROR);
         }
+        catch(ValidationException e){
+            setErrorMessages(e.getErrors());
+        }
     }
 
     @FXML
@@ -84,10 +90,27 @@ public class StarFormController implements Initializable {
 
     private Star getFormData(){
         Star tmpStar = new Star();
+        ValidationException exception = new ValidationException("Validation error");
+
         tmpStar.setId(Utils.tryParseToInt(txtId.getText()));
+
+        if(txtName.getText() == null || txtName.getText().trim().equals("")){
+            exception.addError("StarName", "Field cannot be empty");
+        }
         tmpStar.setName(txtName.getText());
+
+        if(txtStellarClass.getText() == null || txtStellarClass.getText().trim().equals("")){
+            exception.addError("StellarClass", "Field cannot be empty");
+        }
         tmpStar.setStellarClass(txtStellarClass.getText());
+
+        if(txtMass.getText() == null || txtMass.getText().trim().equals("")){
+            exception.addError("StarMass", "Field cannot be empty");
+        }
         tmpStar.setMass(Utils.tryParseToDouble(txtMass.getText()));
+
+        if(exception.getErrors().size() > 0) throw exception;
+
         return tmpStar;
     }
 
@@ -97,6 +120,13 @@ public class StarFormController implements Initializable {
         txtName.setText(star.getName());
         txtStellarClass.setText(star.getStellarClass());
         txtMass.setText(String.valueOf(star.getMass()));
+    }
+
+    private void setErrorMessages(Map<String,String> errors){
+        Set<String> fields = errors.keySet();
+        if(fields.contains("StarName")) labelErrorName.setText(errors.get("StarName"));
+        if(fields.contains("StellarClass")) labelErrorStellarClass.setText(errors.get("StellarClass"));
+        if(fields.contains("StarMass")) labelErrorMass.setText(errors.get("StarMass"));
     }
 
     @Override
