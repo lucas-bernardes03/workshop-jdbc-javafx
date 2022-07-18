@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="507.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PlanetListController">
+   <children>
+      <Label prefHeight="33.0" prefWidth="172.0" text="Planets">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <padding>
+            <Insets left="6.0" top="6.0" />
+         </padding>
+      </Label>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="btNewPlanet" mnemonicParsing="false" onAction="#onBtNewPlanetAction" text="New Planet" />
+        </items>
+      </ToolBar>
+      <TableView fx:id="tableViewPlanet" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="tableColumnId" prefWidth="75.0" text="Id" />
+          <TableColumn fx:id="tableColumnName" prefWidth="75.0" text="Name" />
+            <TableColumn fx:id="tableColumnType" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="tableColumnDiameter" prefWidth="107.0" text="Diameter (km)" />
+            <TableColumn fx:id="tableColumnMass" prefWidth="128.0" text="Mass (Earth Mass)" />
+            <TableColumn fx:id="tableColumnGravity" prefWidth="98.0" text="Gravity (m/s²)" />
+            <TableColumn fx:id="tableColumnOrbitalSpeed" prefWidth="141.0" text="OrbitalSpeed (km/s)" />
+            <TableColumn fx:id="tableColumnEdit" minWidth="7.0" prefWidth="65.0" />
+            <TableColumn fx:id="tableColumnRemove" prefWidth="85.0" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>

@@ -16,6 +16,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
+import model.services.PlanetService;
 import model.services.StarService;
 
 public class MainLayoutController implements Initializable{
@@ -38,7 +39,10 @@ public class MainLayoutController implements Initializable{
     
     @FXML
     public void onMenuItemPlantetAction(){
-        System.out.println("The earth is one of the planets in history!");
+        loadLayout("/gui/PlanetList.fxml", (PlanetListController controller) -> {
+            controller.setPlanetService(new PlanetService());
+            controller.updateTableView();
+        });
     }
     
     @FXML

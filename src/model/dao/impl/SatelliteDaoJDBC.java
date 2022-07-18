@@ -145,7 +145,9 @@ public class SatelliteDaoJDBC extends instImplementations implements SatelliteDa
 
         try{
             pst = con.prepareStatement(
-            "SELECT satellite.*,planet.Name as PlanetName,star.Name as StarName "
+            "SELECT satellite.*,"
+            + "planet.Name as PlanetName,planet.Type as PlanetType,planet.Diameter as PlanetDiameter,planet.Mass as PlanetMass,planet.Gravity as PlanetGravity,planet.OrbitalSpeed as PlanetOrbitalSpeed,"
+            + "star.Name as StarName,star.StellarClass as StarClass,star.Mass as StarMass "
             + "FROM satellite "
             + "INNER JOIN planet ON satellite.PlanetId = planet.Id "
             + "INNER JOIN star ON planet.StarId = star.Id "
@@ -194,7 +196,9 @@ public class SatelliteDaoJDBC extends instImplementations implements SatelliteDa
 
         try{
             pst = con.prepareStatement(
-            "SELECT satellite.*,planet.Name as PlanetName,star.Name as StarName "
+            "SELECT satellite.*,"
+            + "planet.Name as PlanetName,planet.Type as PlanetType,planet.Diameter as PlanetDiameter,planet.Mass as PlanetMass,planet.Gravity as PlanetGravity,planet.OrbitalSpeed as PlanetOrbitalSpeed,"
+            + "star.Name as StarName,star.StellarClass as StarClass,star.Mass as StarMass "
             + "FROM satellite "
             + "INNER JOIN planet ON satellite.PlanetId = planet.Id "
             + "INNER JOIN star ON planet.StarId = star.Id "
@@ -240,13 +244,13 @@ public class SatelliteDaoJDBC extends instImplementations implements SatelliteDa
 
     @Override
     protected Star instStar(ResultSet rs) throws SQLException{
-        Star star = new Star(rs.getInt("StarId"), rs.getString("StarName"), rs.getString("StellarClass"), rs.getDouble("Mass"));
+        Star star = new Star(rs.getInt("StarId"), rs.getString("StarName"), rs.getString("StarClass"), rs.getDouble("StarMass"));
         return star;
     }
 
     @Override
     protected Planet instPlanet(ResultSet rs, Star star) throws SQLException{
-        Planet planet = new Planet(rs.getInt("PlanetId"), rs.getString("PlanetName"), rs.getString("Type"), rs.getDouble("Diameter"), rs.getDouble("Mass"), rs.getDouble("Gravity"), rs.getDouble("OrbitalSpeed"), star);
+        Planet planet = new Planet(rs.getInt("PlanetId"), rs.getString("PlanetName"), rs.getString("PlanetType"), rs.getDouble("PlanetDiameter"), rs.getDouble("PlanetMass"), rs.getDouble("PlanetGravity"), rs.getDouble("PlanetOrbitalSpeed"), star);
         return planet;
     }
 

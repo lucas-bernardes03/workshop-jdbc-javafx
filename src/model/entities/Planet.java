@@ -12,6 +12,8 @@ public class Planet implements Serializable{
     private Double orbitalSpeed;
     private Star star;
     
+    public Planet(){}
+
     public Planet(Integer id, String name, String type, Double diameter, Double mass, Double gravity,
             Double orbitalSpeed, Star star) {
         this.id = id;

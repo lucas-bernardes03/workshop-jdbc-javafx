@@ -150,7 +150,7 @@ public class PlanetDaoJDBC extends instImplementations implements PlanetDao {
 
         try{
             pst = con.prepareStatement(
-            "SELECT planet.*,star.Name as StarName "
+            "SELECT planet.*,star.Name as StarName,star.StellarClass as StarClass,star.Mass as StarMass "
             + "FROM planet INNER JOIN star "
             + "ON planet.StarId = star.Id "
             + "WHERE StarId = ? "
@@ -192,7 +192,7 @@ public class PlanetDaoJDBC extends instImplementations implements PlanetDao {
 
         try{
             pst = con.prepareStatement(
-            "SELECT planet.*,star.Name as StarName "
+            "SELECT planet.*,star.Name as StarName,star.StellarClass as StarClass,star.Mass as StarMass "
             + "FROM planet INNER JOIN star "
             + "ON planet.StarId = star.Id "
             + "ORDER BY Name");
@@ -227,7 +227,7 @@ public class PlanetDaoJDBC extends instImplementations implements PlanetDao {
 
     @Override
     protected Star instStar(ResultSet rs) throws SQLException{
-        Star star = new Star(rs.getInt("StarId"), rs.getString("StarName"), rs.getString("StellarClass"), rs.getDouble("Mass"));
+        Star star = new Star(rs.getInt("StarId"), rs.getString("StarName"), rs.getString("StarClass"), rs.getDouble("StarMass"));
         return star;
     }
 
