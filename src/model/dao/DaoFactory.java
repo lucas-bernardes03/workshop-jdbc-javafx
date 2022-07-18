@@ -14,7 +14,7 @@ public class DaoFactory {
         return new StarDaoJDBC(DB.getConnection());
     }
 
-    public static SatelliteDao creaSatelliteDao(){
+    public static SatelliteDao createSatelliteDao(){
         return new SatelliteDaoJDBC(DB.getConnection());
     }
 }

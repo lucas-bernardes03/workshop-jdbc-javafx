@@ -17,6 +17,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import model.services.PlanetService;
+import model.services.SatelliteService;
 import model.services.StarService;
 
 public class MainLayoutController implements Initializable{
@@ -47,7 +48,10 @@ public class MainLayoutController implements Initializable{
     
     @FXML
     public void onMenuItemSatelliteAction(){
-        System.out.println("We gonna steal the moon!");
+        loadLayout("/gui/SatelliteList.fxml", (SatelliteListController controller) -> {
+            controller.setSatelliteService(new SatelliteService());
+            controller.updateTableView();
+        });
     }
     
     @FXML

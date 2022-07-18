@@ -7,6 +7,8 @@ public class Satellite implements Serializable{
     private String name;
     private Planet planet;
     
+    public Satellite(){}
+
     public Satellite(Integer id, String name, Planet planet) {
         this.id = id;
         this.name = name;

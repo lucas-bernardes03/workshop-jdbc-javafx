@@ -146,7 +146,7 @@ public class SatelliteDaoJDBC extends instImplementations implements SatelliteDa
         try{
             pst = con.prepareStatement(
             "SELECT satellite.*,"
-            + "planet.Name as PlanetName,planet.Type as PlanetType,planet.Diameter as PlanetDiameter,planet.Mass as PlanetMass,planet.Gravity as PlanetGravity,planet.OrbitalSpeed as PlanetOrbitalSpeed,"
+            + "planet.Name as PlanetName,planet.Type as PlanetType,planet.Diameter as PlanetDiameter,planet.Mass as PlanetMass,planet.Gravity as PlanetGravity,planet.OrbitalSpeed as PlanetOrbitalSpeed,planet.StarId as StarId,"
             + "star.Name as StarName,star.StellarClass as StarClass,star.Mass as StarMass "
             + "FROM satellite "
             + "INNER JOIN planet ON satellite.PlanetId = planet.Id "
