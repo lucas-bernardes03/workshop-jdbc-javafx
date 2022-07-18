@@ -76,10 +76,14 @@ public class PlanetListController implements Initializable, DataChangeListener {
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
         tableColumnDiameter.setCellValueFactory(new PropertyValueFactory<>("diameter"));
+        Utils.formatTableColumnDouble(tableColumnDiameter, 0);
         tableColumnMass.setCellValueFactory(new PropertyValueFactory<>("mass"));
+        Utils.formatTableColumnDouble(tableColumnMass, 3);
         tableColumnGravity.setCellValueFactory(new PropertyValueFactory<>("gravity"));
+        Utils.formatTableColumnDouble(tableColumnGravity, 2);
         tableColumnOrbitalSpeed.setCellValueFactory(new PropertyValueFactory<>("orbitalSpeed"));
-        
+        Utils.formatTableColumnDouble(tableColumnOrbitalSpeed, 2);
+
         Stage stage = (Stage) App.getMainScene().getWindow();
         tableViewPlanet.prefHeightProperty().bind(stage.heightProperty());
     }
