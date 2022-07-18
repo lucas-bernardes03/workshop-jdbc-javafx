@@ -18,4 +18,8 @@ public class StarService {
         if(star.getId() == null) dao.insert(star);    
         else dao.update(star);
     }
+
+    public void remove(Star star){
+        dao.deleteById(star.getId());
+    }
 }

@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import app.App;
@@ -18,6 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -26,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.db.DbIntegrityException;
 import model.entities.Star;
 import model.services.StarService;
 
@@ -44,6 +47,8 @@ public class StarListController implements Initializable, DataChangeListener {
     private TableColumn<Star,Double> tableColumnMass;
     @FXML
     private TableColumn<Star,Star> tableColumnEdit;
+    @FXML
+    private TableColumn<Star,Star> tableColumnRemove;
     @FXML
     private Button btNewStar;
     
@@ -76,6 +81,7 @@ public class StarListController implements Initializable, DataChangeListener {
         obsList = FXCollections.observableArrayList(list);
         tableViewStar.setItems(obsList);
         initEditButtons();
+        initRemoveButtons();
     }
 
     private void createDialogForm(Star star, Stage parentStage, String absoluteName){
@@ -120,6 +126,38 @@ public class StarListController implements Initializable, DataChangeListener {
                 bt.setOnAction(event -> createDialogForm(star, Utils.currentStage(event), "/gui/StarForm.fxml"));
             }
         });
+    }
+
+    private void initRemoveButtons(){
+        tableColumnRemove.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnRemove.setCellFactory(param -> new TableCell<Star,Star>(){
+            private final Button bt = new Button("Remove");
+
+            @Override
+            protected void updateItem(Star star, boolean empty){
+                super.updateItem(star, empty);
+                if(star == null){
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(bt);
+                bt.setOnAction(event -> removeStar(star));
+            }
+        });
+    }
+
+    private void removeStar(Star star){
+        Optional<ButtonType> result = Alerts.showconfirmation("Confirmation", "Are you sure to delete?");
+        if(result.get() == ButtonType.OK){
+            if(service == null) throw new IllegalStateException("Service was null");
+            try{
+                service.remove(star);
+                updateTableView();
+            }
+            catch(DbIntegrityException e){
+                Alerts.showAlert("Error removing Star", null, e.getMessage(), AlertType.ERROR);
+            }
+        }
     }
 
     @Override
