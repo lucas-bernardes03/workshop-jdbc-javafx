@@ -5,7 +5,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label prefHeight="39.0" prefWidth="219.0" text="About">
@@ -19,10 +18,47 @@
             <Insets bottom="10.0" left="20.0" top="10.0" />
          </padding>
       </Label>
-      <Label text="JavaFX application">
+      <Label prefHeight="37.0" prefWidth="507.0" text="Java FX application to manipulate data from a database">
          <padding>
             <Insets bottom="10.0" left="30.0" top="10.0" />
          </padding>
+      </Label>
+      <Label prefHeight="26.0" prefWidth="589.0" text="Some info for the tables: ">
+         <padding>
+            <Insets bottom="10.0" left="30.0" top="10.0" />
+         </padding>
+      </Label>
+      <Label prefHeight="37.0" prefWidth="433.0" text="Sun Mass: Approximately 2×10^30 kg">
+         <padding>
+            <Insets bottom="10.0" left="30.0" top="10.0" />
+         </padding>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label prefHeight="37.0" prefWidth="380.0" text="Earth Mass: Approximately 5,972 × 10^24 kg">
+         <padding>
+            <Insets bottom="10.0" left="30.0" top="10.0" />
+         </padding>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label text="Stellar Classification: https://en.wikipedia.org/wiki/Stellar_classification">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <padding>
+            <Insets bottom="10.0" left="30.0" top="10.0" />
+         </padding>
+      </Label>
+      <Label text="Planet Types: https://en.wikipedia.org/wiki/List_of_planet_types">
+         <padding>
+            <Insets bottom="10.0" left="30.0" top="10.0" />
+         </padding>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
       </Label>
    </children>
 </VBox>
