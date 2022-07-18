@@ -41,6 +41,8 @@ public class SatelliteListController implements Initializable, DataChangeListene
     private TableColumn<Satellite,Integer> tableColumnId;
     @FXML
     private TableColumn<Satellite,String> tableColumnName;
+    @FXML
+    private TableColumn<Satellite,String> tableColumnPlanet;
 
     @FXML
     private TableColumn<Satellite,Satellite> tableColumnEdit;
@@ -65,13 +67,14 @@ public class SatelliteListController implements Initializable, DataChangeListene
     private void initializeNodes() {
         tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableColumnPlanet.setCellValueFactory(new PropertyValueFactory<>("planet"));
 
         Stage stage = (Stage) App.getMainScene().getWindow();
         tableViewSatellite.prefHeightProperty().bind(stage.heightProperty());
     }
     
     public void updateTableView(){
-        if(service == null) throw new IllegalStateException("Servce was null");
+        if(service == null) throw new IllegalStateException("Service was null");
         List<Satellite> list = service.findAll();
         obsList = FXCollections.observableArrayList(list);
         tableViewSatellite.setItems(obsList);

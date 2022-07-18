@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="507.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PlanetListController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="1045.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PlanetListController">
    <children>
       <Label prefHeight="33.0" prefWidth="172.0" text="Planets">
          <font>
@@ -32,9 +32,10 @@
             <TableColumn fx:id="tableColumnDiameter" prefWidth="107.0" text="Diameter (km)" />
             <TableColumn fx:id="tableColumnMass" prefWidth="128.0" text="Mass (Earth Mass)" />
             <TableColumn fx:id="tableColumnGravity" prefWidth="98.0" text="Gravity (m/s²)" />
-            <TableColumn fx:id="tableColumnOrbitalSpeed" prefWidth="141.0" text="OrbitalSpeed (km/s)" />
-            <TableColumn fx:id="tableColumnEdit" minWidth="7.0" prefWidth="65.0" />
-            <TableColumn fx:id="tableColumnRemove" prefWidth="85.0" />
+            <TableColumn fx:id="tableColumnOrbitalSpeed" prefWidth="152.0" text="OrbitalSpeed (km/s)" />
+            <TableColumn fx:id="tableColumnStar" prefWidth="75.0" text="Star" />
+            <TableColumn fx:id="tableColumnEdit" minWidth="7.0" prefWidth="74.0" />
+            <TableColumn fx:id="tableColumnRemove" prefWidth="69.0" />
         </columns>
       </TableView>
    </children>

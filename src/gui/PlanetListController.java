@@ -53,6 +53,8 @@ public class PlanetListController implements Initializable, DataChangeListener {
     @FXML
     private TableColumn<Planet,Double> tableColumnOrbitalSpeed;
     @FXML
+    private TableColumn<Planet,String> tableColumnStar;
+    @FXML
     private TableColumn<Planet,Planet> tableColumnEdit;
     @FXML
     private TableColumn<Planet,Planet> tableColumnRemove;
@@ -84,13 +86,14 @@ public class PlanetListController implements Initializable, DataChangeListener {
         Utils.formatTableColumnDouble(tableColumnGravity, 2);
         tableColumnOrbitalSpeed.setCellValueFactory(new PropertyValueFactory<>("orbitalSpeed"));
         Utils.formatTableColumnDouble(tableColumnOrbitalSpeed, 2);
+        tableColumnStar.setCellValueFactory(new PropertyValueFactory<>("star"));
 
         Stage stage = (Stage) App.getMainScene().getWindow();
         tableViewPlanet.prefHeightProperty().bind(stage.heightProperty());
     }
     
     public void updateTableView(){
-        if(service == null) throw new IllegalStateException("Servce was null");
+        if(service == null) throw new IllegalStateException("Service was null");
         List<Planet> list = service.findAll();
         obsList = FXCollections.observableArrayList(list);
         tableViewPlanet.setItems(obsList);
