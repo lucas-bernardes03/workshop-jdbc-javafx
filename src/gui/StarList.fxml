@@ -30,6 +30,7 @@
           <TableColumn fx:id="tableColumnName" prefWidth="75.0" text="Name" />
             <TableColumn fx:id="tableColumnStellar" prefWidth="75.0" text="Stellar Class" />
             <TableColumn fx:id="tableColumnMass" prefWidth="75.0" text="Mass" />
+            <TableColumn fx:id="tableColumnEdit" prefWidth="75.0" />
         </columns>
       </TableView>
    </children>

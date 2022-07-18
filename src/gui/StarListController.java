@@ -9,6 +9,7 @@ import app.App;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
@@ -40,6 +42,8 @@ public class StarListController implements Initializable, DataChangeListener {
     private TableColumn<Star,String> tableColumnStellar;
     @FXML
     private TableColumn<Star,Double> tableColumnMass;
+    @FXML
+    private TableColumn<Star,Star> tableColumnEdit;
     @FXML
     private Button btNewStar;
     
@@ -71,6 +75,7 @@ public class StarListController implements Initializable, DataChangeListener {
         List<Star> list = service.findAll();
         obsList = FXCollections.observableArrayList(list);
         tableViewStar.setItems(obsList);
+        initEditButtons();
     }
 
     private void createDialogForm(Star star, Stage parentStage, String absoluteName){
@@ -97,15 +102,34 @@ public class StarListController implements Initializable, DataChangeListener {
             Alerts.showAlert("IO Exception", "Error loading layout", e.getMessage(), AlertType.ERROR);
         }
     }
+    
+    private void initEditButtons(){
+        tableColumnEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnEdit.setCellFactory(param -> new TableCell<Star,Star>(){
+            private final Button bt = new Button("Edit");
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        initializeNodes();
+            @Override
+            protected void updateItem(Star star, boolean empty){
+                super.updateItem(star, empty);
+                if(star == null){
+                    setGraphic(null);
+                    return;
+                }
+                
+                setGraphic(bt);
+                bt.setOnAction(event -> createDialogForm(star, Utils.currentStage(event), "/gui/StarForm.fxml"));
+            }
+        });
     }
 
     @Override
     public void onDataChange() {
         updateTableView();
+    }
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initializeNodes();
     }
 
 }
