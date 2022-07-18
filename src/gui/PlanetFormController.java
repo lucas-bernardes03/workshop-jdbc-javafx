@@ -150,6 +150,8 @@ public class PlanetFormController implements Initializable {
         }
         tmpPlanet.setOrbitalSpeed(Utils.tryParseToDouble(txtOrbitalSpeed.getText()));
 
+        tmpPlanet.setStar(comboBoxStar.getValue());
+
         if(exception.getErrors().size() > 0) throw exception;
 
         return tmpPlanet;
@@ -170,12 +172,12 @@ public class PlanetFormController implements Initializable {
 
     private void setErrorMessages(Map<String,String> errors){
         Set<String> fields = errors.keySet();
-        if(fields.contains("PlanetName")) labelErrorName.setText(errors.get("PlanetName"));
-        if(fields.contains("PlanetType")) labelErrorType.setText(errors.get("PlanetType"));
-        if(fields.contains("PlanetDiameter")) labelErrorDiameter.setText(errors.get("PlanetDiameter"));
-        if(fields.contains("PlanetMass")) labelErrorMass.setText(errors.get("PlanetMass"));
-        if(fields.contains("PlanetGravity")) labelErrorGravity.setText(errors.get("PlanetGravity"));
-        if(fields.contains("PlanetOrbitalSpeed")) labelErrorOrbitalSpeed.setText(errors.get("PlanetOrbitalSpeed"));
+        labelErrorName.setText(fields.contains("PlanetName") ? errors.get("PlanetName"):"");
+        labelErrorType.setText(fields.contains("PlanetType") ? errors.get("PlanetType"):"");
+        labelErrorDiameter.setText(fields.contains("PlanetDiameter") ? errors.get("PlanetDiameter"):"");
+        labelErrorMass.setText(fields.contains("PlanetMass") ? errors.get("PlanetMass"):"");
+        labelErrorGravity.setText(fields.contains("PlanetGravity") ? errors.get("PlanetGravity"):"");
+        labelErrorOrbitalSpeed.setText(fields.contains("PlanetOrbitalSpeed") ? errors.get("PlanetOrbitalSpeed"):"");
     }
 
     public void loadAssociatedObjects(){

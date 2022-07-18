@@ -38,6 +38,7 @@
             <Label text="Mass" GridPane.rowIndex="4" />
             <Label text="Gravity" GridPane.rowIndex="5" />
             <Label text="Orbital Speed" GridPane.rowIndex="6" />
+            <Label text="Star" GridPane.rowIndex="7" />
             <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" />
             <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="txtType" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -45,6 +46,7 @@
             <TextField fx:id="txtMass" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <TextField fx:id="txtGravity" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="txtOrbitalSpeed" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <ComboBox fx:id="comboBoxStar" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label fx:id="labelErrorName" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="5.0" />
@@ -78,8 +80,6 @@
                   <Button fx:id="btCancel" mnemonicParsing="false" onAction="#onBtCancelAction" text="Cancel" />
                </children>
             </HBox>
-            <Label text="Star" GridPane.rowIndex="7" />
-            <ComboBox fx:id="comboBoxStar" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
       </GridPane>
    </children>

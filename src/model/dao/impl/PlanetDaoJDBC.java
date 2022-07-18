@@ -80,7 +80,7 @@ public class PlanetDaoJDBC extends instImplementations implements PlanetDao {
             pst.setDouble(5, planet.getGravity());
             pst.setDouble(6, planet.getOrbitalSpeed());
             pst.setInt(7, planet.getStar().getId());
-            pst.setInt(6, planet.getId());
+            pst.setInt(8, planet.getId());
 
             pst.executeUpdate();
 
