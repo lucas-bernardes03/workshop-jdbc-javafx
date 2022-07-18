@@ -99,28 +99,28 @@ public class PlanetListController implements Initializable, DataChangeListener {
 
     
     private void createDialogForm(Planet planet, Stage parentStage, String absoluteName){
-        // try{
-        //     FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-        //     Pane pane = loader.load();
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            Pane pane = loader.load();
 
-        //     PlanetFormController controller = loader.getController();
-        //     controller.setPlanet(planet);
-        //     controller.setPlanetService(new PlanetService());
-        //     controller.subscribeDataChangeListener(this);
-        //     controller.updateFormData();
+            PlanetFormController controller = loader.getController();
+            controller.setPlanet(planet);
+            controller.setPlanetService(new PlanetService());
+            controller.subscribeDataChangeListener(this);
+            controller.updateFormData();
 
-        //     Stage dialogStage = new Stage();
-        //     dialogStage.setTitle("Enter Planet data");
-        //     dialogStage.setScene(new Scene(pane));
-        //     dialogStage.setResizable(false);
-        //     dialogStage.initOwner(parentStage);
-        //     dialogStage.initModality(Modality.WINDOW_MODAL);
-        //     dialogStage.showAndWait();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Enter Planet data");
+            dialogStage.setScene(new Scene(pane));
+            dialogStage.setResizable(false);
+            dialogStage.initOwner(parentStage);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.showAndWait();
 
-        // }
-        // catch(IOException e){
-        //     Alerts.showAlert("IO Exception", "Error loading layout", e.getMessage(), AlertType.ERROR);
-        // }
+        }
+        catch(IOException e){
+            Alerts.showAlert("IO Exception", "Error loading layout", e.getMessage(), AlertType.ERROR);
+        }
     }
     
     private void initEditButtons(){
