@@ -30,6 +30,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.db.DbIntegrityException;
 import model.entities.Satellite;
+import model.services.PlanetService;
 import model.services.SatelliteService;
 
 public class SatelliteListController implements Initializable, DataChangeListener {
@@ -83,29 +84,30 @@ public class SatelliteListController implements Initializable, DataChangeListene
     }
 
     private void createDialogForm(Satellite satellite, Stage parentStage, String absoluteName){
-        // try{
-        //     FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-        //     Pane pane = loader.load();
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            Pane pane = loader.load();
 
-        //     SatelliteFormController controller = loader.getController();
-        //     controller.setSatellite(satellite);
-        //     controller.setSatelliteService(new SatelliteService());
-        //     controller.subscribeDataChangeListener(this);
-        //     controller.updateFormData();
+            SatelliteFormController controller = loader.getController();
+            controller.setSatellite(satellite);
+            controller.setSatelliteServices(new SatelliteService(), new PlanetService());
+            controller.loadAssociatedObjects();
+            controller.subscribeDataChangeListener(this);
+            controller.updateFormData();
 
-        //     Stage dialogStage = new Stage();
-        //     dialogStage.setTitle("Enter Satellite data");
-        //     dialogStage.setScene(new Scene(pane));
-        //     dialogStage.setResizable(false);
-        //     dialogStage.initOwner(parentStage);
-        //     dialogStage.initModality(Modality.WINDOW_MODAL);
-        //     dialogStage.showAndWait();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Enter Satellite data");
+            dialogStage.setScene(new Scene(pane));
+            dialogStage.setResizable(false);
+            dialogStage.initOwner(parentStage);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.showAndWait();
 
-        // }
-        // catch(IOException e){
-        //     e.printStackTrace();
-        //     Alerts.showAlert("IO Exception", "Error loading layout", e.getMessage(), AlertType.ERROR);
-        // }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+            Alerts.showAlert("IO Exception", "Error loading layout", e.getMessage(), AlertType.ERROR);
+        }
     }
     
     private void initEditButtons(){
